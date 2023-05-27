@@ -1,0 +1,22 @@
+<div class="search-container" [ngClass]="{'focus': isTextboxFocused}">
+    <input type="text" [(ngModel)]="searchQuery" placeholder="Keresés" (keyup.enter)="searchMovies()" (focus)="isTextboxFocused = true" (blur)="isTextboxFocused = false">
+    <i class="material-icons search-icon" *ngIf="!isTextboxFocused">search</i>
+  </div>
+  
+  <div class="card-container">
+    <ng-container *ngFor="let movie of movies">
+      <div class="card" *ngIf="movie.imagesLoaded && movie.images && movie.images.length > 0">
+        <div class="card-image">
+          <img [src]="getMovieImageURL(movie.images[0].file_path)" alt="Movie Image">
+        </div>
+        <div class="card-content">
+            <h3>{{ movie.title }}</h3>
+            <p class="release-date">Megjelenési dátumd: {{ movie.release_date }}</p>
+          </div>
+      </div>
+    </ng-container>
+  </div>
+  
+  
+  
+  
