@@ -14,18 +14,17 @@ import { map } from 'rxjs/operators';
 export class MovieService {
   private apiKey = environment.apiKey;
   private apiUrl = 'https://api.themoviedb.org/3';
-  private discoverUrl = 'https://api.themoviedb.org/3/discover/movie';
 
   constructor(private http: HttpClient) { }
 
-  getPopularMovies(): Observable<Movie[]> {
+  getPopularMovies(): Observable<SearchResult<Movie[]>> {
     const url = `${this.apiUrl}/movie/popular?api_key=${this.apiKey}`;
-    return this.http.get<Movie[]>(url);
+    return this.http.get<SearchResult<Movie[]>>(url);
   }
 
   searchMovies(query: string, page: number, pageSize: number): Observable<SearchResult<Movie[]>> {
     if (query === '') {
-      const url1 = `${this.apiUrl}/movie/popular?api_key=${this.apiKey}&page=${page}&include_adult=false`;
+      const url1 = `${this.apiUrl}/movie/popular?language=hu&api_key=${this.apiKey}&page=${page}&include_adult=false`;
       return this.http.get<SearchResult<Movie[]>>(url1);
     }
     const url = `${this.apiUrl}/search/movie?api_key=${this.apiKey}&language=hu&query=${query}&page=${page}&include_adult=false`;
@@ -49,7 +48,5 @@ export class MovieService {
       map((response: any) => response.cast)
     );
   }
-  
-
 
 }

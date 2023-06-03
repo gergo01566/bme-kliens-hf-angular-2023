@@ -2,13 +2,19 @@
   <div class="menu">
     <ul>
       <li class="menu-item">
-        <a href="#">Most játszottak</a>
+        <a href="#" [class.selected]="moviesSelected" (click)="selectMovies()">Filmek</a>
       </li>
       <li class="menu-item">
-        <a href="#">Népszerűek</a>
+        <a href="#" [class.selected]="seriesSelected" (click)="selectSeries()">Sorozatok</a>
       </li>
       <li class="menu-item">
-        <a href="#">Legjobbra értékelt</a>
+        <a href="#" [class.selected]="selectedType === 'nowPlaying'" (click)="selectType('nowPlaying')">Most játszottak</a>
+      </li>
+      <li class="menu-item">
+        <a href="#" [class.selected]="selectedType === 'popular'" (click)="selectType('popular')" (click)="getPopular()">Népszerűek</a>
+      </li>
+      <li class="menu-item">
+        <a href="#" [class.selected]="selectedType === 'topRated'" (click)="selectType('topRated')">Legjobbra értékelt</a>
       </li>
     </ul>
   </div>
@@ -20,36 +26,55 @@
 </div>
 
 <div class="card-container">
-  <ng-container *ngFor="let movie of movies">
-    <div class="card" *ngIf="movie.imagesLoaded && movie.images && movie.images.length > 0">
-      <div class="card-image">
-        <img [src]="getMovieImageURL(movie.images[0].file_path)" alt="Movie Image">
-      </div>
-      <div class="card-content">
-        <h3>{{ movie.title }}</h3>
-        <div class="movie-info">
-          <p><strong>Megjelenési dátum:</strong> {{ movie.release_date }}</p>
-          <p><strong>Értékelés:</strong> {{ movie.vote_average }}</p>
-          <p><strong>Eredeti nyelv:</strong> {{ movie.original_language }}</p>
-          <p><strong>Műfaj:</strong> {{ getGenresByIds(movie.genre_ids) }}</p>
-          <p><strong>Szereplők:</strong>
-            <ng-container *ngIf="movie.actors">
-              <ng-container *ngFor="let actor of movie.actors.slice(0, 5); let i = index">
-                {{ actor.name }}
-                <ng-container *ngIf="i < 4">, </ng-container>
-                <ng-container *ngIf="i === 4 && movie.actors.length > 5">...</ng-container>
+  <ng-container *ngIf="moviesSelected">
+    <ng-container *ngFor="let movie of movies">
+      <div class="card" *ngIf="movie.imagesLoaded">
+        <div class="card-image">
+          <img [src]="getImageURL(movie.images[0].file_path)" alt="Movie Image">
+        </div>
+        <div class="card-content">
+          <h3>{{ movie.title }}</h3>
+          <div class="movie-info">
+            <p><strong>Megjelenési dátum:</strong> {{ movie.release_date }}</p>
+            <p><strong>Értékelés:</strong> {{ movie.vote_average }}</p>
+            <p><strong>Eredeti nyelv:</strong> {{ movie.original_language }}</p>
+            <p><strong>Műfaj:</strong> {{ getGenresByIds(movie.genre_ids) }}</p>
+            <p><strong>Szereplők:</strong>
+              <ng-container *ngIf="movie.actors">
+                <ng-container *ngFor="let actor of movie.actors.slice(0, 5); let i = index">
+                  {{ actor.name }}
+                  <ng-container *ngIf="i < 4">, </ng-container>
+                  <ng-container *ngIf="i === 4 && movie.actors.length > 5">...</ng-container>
+                </ng-container>
               </ng-container>
-            </ng-container>
-          </p>
-          
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="seriesSelected">
+    <ng-container *ngFor="let tv of series">
+      <div class="card" *ngIf="tv.imagesLoaded">
+        <div class="card-image">
+          <img [src]="getImageURL(tv.images[0].file_path)" alt="Movie Image">
+        </div>
+        <div class="card-content">
+          <h3>{{ tv.name }}</h3>
+          <div class="movie-info">
+            <p><strong>Első adás:</strong> {{ tv.first_air_date }}</p>
+            <p><strong>Értékelés:</strong> {{ tv.vote_average }}</p>
+            <p><strong>Eredeti nyelv:</strong> {{ tv.original_language }}</p>
+            <p><strong>Műfaj:</strong> {{ getGenresByIds(tv.genre_ids) }}</p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
   </ng-container>
 </div>
 
 <div class="pagination">
   <button class="pagination-button" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">Previous</button>
-  <button class="pagination-button" *ngFor="let page of availablePages" [class.active]="page === currentPage" (click)="goToPage(page)">{{ page }}</button>
   <button class="pagination-button" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">Next</button>
 </div>

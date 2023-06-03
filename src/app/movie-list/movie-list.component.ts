@@ -4,6 +4,8 @@ import { MovieService } from "../services/movie.service";
 import { SearchResult } from "../models/search-result.ype";
 import { Genre } from "../models/genre.type";
 import { Actor } from "../models/actor.type";
+import { SeriesService } from "../services/series.service";
+import { Series } from "../models/series.type";
 
 @Component({
   selector: 'app-movie-list',
@@ -12,29 +14,74 @@ import { Actor } from "../models/actor.type";
 })
 export class MovieListComponent implements OnInit {
   movies: Movie[]; // Initialize as an empty array
+  series: Series[]; // Initialize as an empty array
   genres: Genre[]; // Initialize as an empty array
   searchQuery: string = '';
   isTextboxFocused: boolean = false;
-
-  constructor(private movieService: MovieService) {}
-
+  moviesSelected: boolean = true;
+  seriesSelected: boolean = false;
+  selectedType: string = "";
   currentPage: number = 1;
   pageSize: number = 10;
   totalResults: number = 0;
   totalPages: number = 0;
 
+
+  selectMovies() {
+    this.moviesSelected = true;
+    this.seriesSelected = false;
+    this.currentPage = 1;
+  }
+  
+  selectSeries() {
+    this.moviesSelected = false;
+    this.seriesSelected = true;
+    this.currentPage = 1;
+  }
+  
+
+  selectType(type: string) {
+    if (type === 'movies' || type === 'series') {
+      this.moviesSelected = type === 'movies';
+      this.seriesSelected = type === 'series';
+      // Call the corresponding method or perform any other actions for selecting movies or series
+    } else {
+        this.selectedType = type;
+      // Call the corresponding method or perform any other actions for selecting the other buttons
+    }
+  }
+
+  constructor(private movieService: MovieService, private seriesService: SeriesService) {}
+
   ngOnInit() {
     this.loadMovies();
+    this.loadSeries();
     this.loadGenres();
+    this.searchMovies();
   }
 
   loadGenres() {
-    this.movieService.getGenres().subscribe((data: any) => {
-      this.genres = data.genres; // Adjust the mapping based on the API response structure
-      console.log(this.genres);
-      console.log('ok' + this.getGenresByIds([28,15]));
+    this.movieService.getGenres().subscribe((movieData: any) => {
+      const movieGenres = movieData.genres;
+      this.seriesService.getGenres().subscribe((seriesData: any) => {
+        const seriesGenres = seriesData.genres;
+        const mergedGenres = this.mergeGenres(movieGenres, seriesGenres);
+        this.genres = mergedGenres;
+      });
     });
   }
+  
+  mergeGenres(movieGenres: Genre[], seriesGenres: Genre[]): Genre[] {
+    const mergedGenres: Genre[] = [...movieGenres];
+    for (const seriesGenre of seriesGenres) {
+      const isDuplicate = mergedGenres.some((movieGenre) => movieGenre.id === seriesGenre.id);
+      if (!isDuplicate) {
+        mergedGenres.push(seriesGenre);
+      }
+    }
+    return mergedGenres;
+  }
+  
 
   loadMovies() {
     this.movieService.searchMovies(this.searchQuery, this.currentPage, this.pageSize)
@@ -45,61 +92,126 @@ export class MovieListComponent implements OnInit {
         this.fetchActorsForMovies();
       });
   }
-  
 
-  searchMovies() {
-    this.movieService.searchMovies(this.searchQuery, this.currentPage, this.pageSize)
-      .subscribe((data: SearchResult<Movie[]>) => {
-        this.movies = data.results.flatMap((page) => page); // Flatten the array of pages
-        console.log(this.movies);
-  
-        this.totalResults = data.total_results; // Assign total_results to a variable
-        console.log(this.totalResults);
-  
-        this.totalPages = data.total_pages; // Assign total_pages to a variable
-        console.log(this.totalPages);
-  
-        this.fetchImagesForMovies();
-        this.fetchActorsForMovies(); // Return
+  loadSeries() {
+    this.seriesService.searchSeries(this.searchQuery, this.currentPage, this.pageSize)
+      .subscribe((data: SearchResult<Series[]>) => {
+        this.series = data.results.flatMap((page) => page);
+        this.totalResults = data.total_results;
+        this.totalPages = data.total_pages;
+        this.fetchImagesForSeries();
       });
   }
   
 
+  searchMovies() {
+    if (this.moviesSelected) {
+      this.movieService.searchMovies(this.searchQuery, this.currentPage, this.pageSize)
+        .subscribe((data: SearchResult<Movie[]>) => {
+          this.movies = data.results.flatMap((page) => page);
+          this.totalResults = data.total_results;
+          this.totalPages = data.total_pages;
+          this.fetchImagesForMovies();
+          this.fetchActorsForMovies();
+        });
+    } else {
+      this.seriesService.searchSeries(this.searchQuery, this.currentPage, this.pageSize)
+        .subscribe((data: SearchResult<Series[]>) => {
+          this.series = data.results.flatMap((page) => page);
+          this.totalResults = data.total_results;
+          this.totalPages = data.total_pages;
+          this.fetchImagesForSeries();
+        });
+    }
+    this.selectedType = '';
+    console.log(this.series);
+  }
+
+  getPopular(){
+    if(this.moviesSelected){
+      this.movieService.getPopularMovies().subscribe((data: SearchResult<Movie[]>) => {
+        this.movies = data.results.flatMap((page) => page); // Flatten the array of pages
+        this.totalResults = data.total_results;
+        this.totalPages = data.total_pages;
+        this.fetchImagesForMovies();
+        this.fetchActorsForMovies();
+      });
+    } else {
+      this.seriesService.getPopularSeries().subscribe((data: SearchResult<Series[]>) => {
+        this.series = data.results.flatMap((page) => page); // Flatten the array of pages
+        this.totalResults = data.total_results;
+        this.totalPages = data.total_pages;
+        this.fetchImagesForSeries();
+        //this.fetchActorsForMovies();
+      });
+    }
+  }
+  
+
   fetchImagesForMovies() {
+    const placeholderImagePath = 'https://www.unfe.org/wp-content/uploads/2019/04/SM-placeholder.png';
+  
     for (const movie of this.movies) {
       this.movieService.getMovieImages(movie.id).subscribe((imageData: any) => {
         if (imageData && imageData.backdrops && imageData.backdrops.length > 0) {
           movie.images = imageData.backdrops.filter((image: any) => image.file_path !== null);
+          
+          // Check if movie.images array is empty
+          if (movie.images.length === 0) {
+            // Add a placeholder image to the movie.images array
+            movie.images.push({
+              file_path: placeholderImagePath,
+              // You can add more properties if needed, such as width and height
+            });
+          }
+          
           movie.imagesLoaded = true;
         }
       });
     }
   }
 
-  fetchActorsForMovies() {
-    for (const movie of this.movies) {
-      this.movieService.getActors(movie.id).subscribe((actorData: Actor[]) => {
-        movie.actors = actorData;
-        console.log(movie.actors);
+  fetchImagesForSeries() {
+    const placeholderImagePath = 'https://www.unfe.org/wp-content/uploads/2019/04/SM-placeholder.png';
+  
+    for (const ser of this.series) {
+      this.seriesService.getSeriesImages(ser.id).subscribe((imageData: any) => {
+        if (imageData && imageData.backdrops && imageData.backdrops.length > 0) {
+          ser.images = imageData.backdrops.filter((image: any) => image.file_path !== null);
+  
+          if (ser.images.length === 0) {
+            ser.images.push({
+              file_path: placeholderImagePath,
+            });
+          }
+          ser.imagesLoaded = true;
+        }
       });
     }
   }
   
+  
 
-  getMovieImageURL(filePath: string) {
+  fetchActorsForMovies() {
+    for (const movie of this.movies) {
+      this.movieService.getActors(movie.id).subscribe((actorData: Actor[]) => {
+        movie.actors = actorData;
+      });
+    }
+  }
+
+  getImageURL(filePath: string) {
     const baseImageUrl = 'https://image.tmdb.org/t/p/';
     const imageSize = 'w500'; // You can adjust the size as per your requirements
     return baseImageUrl + imageSize + filePath;
   }
-
-
   
   goToPage(page: number) {
-    console.log(this.totalPages);
     
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.loadMovies();
+      if(this.moviesSelected) this.loadMovies();
+      else this.loadSeries();
     }
   }
   

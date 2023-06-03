@@ -280,9 +280,16 @@ color : #2f3640;
 
 .menu-item a:hover {
   background-color: #0056b3;
+  color: #ffffff;
 }
 
 
 .content-container {
   margin-left: 220px; /* Adjust this value to create space between the menu and content */
+}
+
+.menu-item a.selected {
+  background-color: #0056b3;
+  color:#ffffff
+  /* Add any other styling you want to apply to the selected button */
 }
