@@ -6,6 +6,8 @@ import { Genre } from "../models/genre.type";
 import { Actor } from "../models/actor.type";
 import { SeriesService } from "../services/series.service";
 import { Series } from "../models/series.type";
+import { Season } from "../models/season.type";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-movie-list',
@@ -51,13 +53,18 @@ export class MovieListComponent implements OnInit {
     }
   }
 
-  constructor(private movieService: MovieService, private seriesService: SeriesService) {}
+  constructor(private movieService: MovieService, private seriesService: SeriesService, private router: Router) {}
 
   ngOnInit() {
     this.loadMovies();
     this.loadSeries();
     this.loadGenres();
     this.searchMovies();
+  }
+
+  navigateToMovieDetails(movieId: number) {
+    console.log(movieId);
+    this.router.navigate(["/movie-details", movieId]);
   }
 
   loadGenres() {
@@ -100,6 +107,7 @@ export class MovieListComponent implements OnInit {
         this.totalResults = data.total_results;
         this.totalPages = data.total_pages;
         this.fetchImagesForSeries();
+        this.fetchSeasonsForSeries();
       });
   }
   
@@ -121,6 +129,7 @@ export class MovieListComponent implements OnInit {
           this.totalResults = data.total_results;
           this.totalPages = data.total_pages;
           this.fetchImagesForSeries();
+          this.fetchSeasonsForSeries();
         });
     }
     this.selectedType = '';
@@ -142,6 +151,7 @@ export class MovieListComponent implements OnInit {
         this.totalResults = data.total_results;
         this.totalPages = data.total_pages;
         this.fetchImagesForSeries();
+        this.fetchSeasonsForSeries();
         //this.fetchActorsForMovies();
       });
     }
@@ -189,8 +199,17 @@ export class MovieListComponent implements OnInit {
       });
     }
   }
-  
-  
+
+  fetchSeasonsForSeries() {
+    for (const ser of this.series) {
+      this.seriesService.getSeasons(ser.id).subscribe((seasonData: Season[]) => {
+        console.log(seasonData);
+        ser.seasons = seasonData;
+        console.log(ser.seasons);
+      });
+    }
+  }  
+
 
   fetchActorsForMovies() {
     for (const movie of this.movies) {
@@ -232,7 +251,6 @@ export class MovieListComponent implements OnInit {
 
     return genreNames.join(', ');
   }
-  
-  
+
   
 }

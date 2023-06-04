@@ -31,7 +31,6 @@ export class MovieService {
     return this.http.get<SearchResult<Movie[]>>(url);
   }
 
-
   getMovieImages(movieId: number) {
       const url = `${this.apiUrl}/movie/${movieId}/images?api_key=${this.apiKey}`;
       return this.http.get(url);

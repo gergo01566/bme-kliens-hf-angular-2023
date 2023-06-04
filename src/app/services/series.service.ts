@@ -3,8 +3,9 @@ import { environment } from '../environments';
 import { HttpClient } from '@angular/common/http';
 import { Series } from '../models/series.type';
 import { SearchResult } from '../models/search-result.ype';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Genre } from '../models/genre.type';
+import { Season } from '../models/season.type';
 
 @Injectable({
   providedIn: 'root'
@@ -17,14 +18,14 @@ export class SeriesService {
   constructor(private http: HttpClient) { }
 
   getPopularSeries(): Observable<SearchResult<Series[]>> {
-    const url = `${this.apiUrl}/tv/popular?api_key=${this.apiKey}`;
+    const url = `${this.apiUrl}/tv/popular?language=hu&api_key=${this.apiKey}`;
     return this.http.get<SearchResult<Series[]>>(url);
   }
 
   searchSeries(query: string, page: number, pageSize: number): Observable<SearchResult<Series[]>> {
     console.log(query);
     if (query === '') {
-      const url1 = `${this.apiUrl}/tv/popular?api_key=${this.apiKey}&page=${page}&include_adult=false`;
+      const url1 = `${this.apiUrl}/tv/popular?language=en&api_key=${this.apiKey}&page=${page}&include_adult=false`;
       return this.http.get<SearchResult<Series[]>>(url1);
     }
     const url = `${this.apiUrl}/search/tv?api_key=${this.apiKey}&language=hu&query=${query}&page=${page}&include_adult=false`;
@@ -42,12 +43,10 @@ export class SeriesService {
     return this.http.get<Genre[]>(url);
   }
 
-
-
-  // getActors(movieId: number): Observable<Actor[]> {
-  //   const url = `${this.apiUrl}/movie/${movieId}/credits?api_key=${this.apiKey}`;
-  //   return this.http.get<Actor[]>(url).pipe(
-  //     map((response: any) => response.cast)
-  //   );
-  // }
+  getSeasons(tvId: number): Observable<Season[]> {
+    const url = `${this.apiUrl}/tv/${tvId}?language=hu&api_key=${this.apiKey}`;
+    return this.http.get<Season[]>(url).pipe(
+      map((response: any) => response.seasons)
+    );
+  }
 }

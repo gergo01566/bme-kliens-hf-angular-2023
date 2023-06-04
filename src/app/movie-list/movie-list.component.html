@@ -28,9 +28,9 @@
 <div class="card-container">
   <ng-container *ngIf="moviesSelected">
     <ng-container *ngFor="let movie of movies">
-      <div class="card" *ngIf="movie.imagesLoaded">
+      <div class="card" *ngIf="movie.imagesLoaded" (click)="navigateToMovieDetails(movie.id)">
         <div class="card-image">
-          <img [src]="getImageURL(movie.images[0].file_path)" alt="Movie Image">
+          <img [src]="getImageURL(movie.images[0].file_path)" (click)="navigateToMovieDetails(movie.id)" alt="Movie Image">
         </div>
         <div class="card-content">
           <h3>{{ movie.title }}</h3>
@@ -54,6 +54,7 @@
     </ng-container>
   </ng-container>
 
+
   <ng-container *ngIf="seriesSelected">
     <ng-container *ngFor="let tv of series">
       <div class="card" *ngIf="tv.imagesLoaded">
@@ -67,6 +68,15 @@
             <p><strong>Értékelés:</strong> {{ tv.vote_average }}</p>
             <p><strong>Eredeti nyelv:</strong> {{ tv.original_language }}</p>
             <p><strong>Műfaj:</strong> {{ getGenresByIds(tv.genre_ids) }}</p>
+            <p><strong>Évadok:</strong>
+            <ng-container *ngIf="tv.seasons">
+              <ng-container *ngFor="let season of tv.seasons.slice(0, 5); let i = index">
+                {{ season.name }}
+                <ng-container *ngIf="i < (tv.seasons.length - 1)">, </ng-container>
+                <ng-container *ngIf="i === 4 && tv.seasons.length > 5">...</ng-container>
+              </ng-container>
+            </ng-container>
+          </p>
           </div>
         </div>
       </div>

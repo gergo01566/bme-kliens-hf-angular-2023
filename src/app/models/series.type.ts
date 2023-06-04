@@ -1,4 +1,4 @@
-import { Actor } from "./actor.type";
+import { Season } from "./season.type";
 
 export interface Series {
   adult: boolean;
@@ -27,5 +27,5 @@ export interface Series {
   trailerUrl: string;
   images: any[]; // Add the images property
   imagesLoaded: boolean; // Add the imagesLoaded property
-  actors: Actor[]; // Add the actors property
+  seasons: Season[]; // Add the seasons property
   }
