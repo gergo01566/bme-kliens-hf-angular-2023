@@ -1,0 +1,48 @@
+<div class="mdc-card movie-details-container" *ngIf="movie">
+    <div class="mdc-card__primary-action movie-details-header">
+        <h1 class="mdc-typography--headline6 movie-title">{{ movie.title }}</h1>
+        <button class="mdc-icon-button material-icons mdc-icon-button--primary back-button" (click)="goBack()">arrow_back</button>
+    </div>
+  
+    <div class="mdc-card__media mdc-card__media--16-9 movie-images">
+        <img class="mdc-card__media-content movie-poster" [src]="movie.images && movie.images.length > 0 ? getImageURL(movie.images[0].file_path) : ''" alt="Movie Poster">
+    </div>
+  
+    <div class="mdc-card__content movie-details">
+        <h2 class="mdc-typography--subtitle1 section-title">Bevezető</h2>
+        <p class="mdc-typography--body2 summary">{{ movie.overview }}</p>
+  
+        <h2 class="mdc-typography--subtitle1 section-title">További részletek</h2>
+        <ul class="mdc-list details-list">
+            <li class="mdc-list-item">
+                <span class="mdc-typography--body2 rating-label"><strong>Értékelés:</strong></span>
+                <div class="rating-wrapper">
+                    <span class="rating-star">&#9733;</span>
+                    <span class="mdc-typography--body2 rating-value">{{ movie.vote_average }}/10</span>
+                </div>
+            </li>
+            <li class="mdc-list-item">
+                <span class="mdc-list-item__text"><strong>Megjelenési dátum:</strong> {{ movie.release_date }}</span>
+            </li>
+            <li class="mdc-list-item">
+                <span class="mdc-list-item__text"><strong>Film hossza:</strong> {{ movie.runtime }} perc</span>
+            </li>
+        
+            <li class="mdc-list-item">
+                <span class="mdc-list-item__text"><strong>Eredeti nyelv:</strong> {{ movie.original_language }}</span>
+            </li>
+            <li class="mdc-list-item">
+                <span class="mdc-list-item__text">
+                    <strong>Szereplők:</strong>
+                    <ng-container *ngIf="movie.actors">
+                        <ng-container *ngFor="let actor of movie.actors.slice(0, 30); let i = index">
+                            {{ actor.name }}
+                            <ng-container *ngIf="i < movie.actors.length - 1">, </ng-container>
+                            <ng-container *ngIf="i === 4 && movie.actors.length > 30">...</ng-container>
+                        </ng-container>
+                    </ng-container>
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>

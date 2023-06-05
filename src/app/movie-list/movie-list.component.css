@@ -1,0 +1,295 @@
+.search-container {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    padding: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    width: 200px; /* Update max-width to width */
+    margin: 0 auto;
+    transition: width 0.3s ease; /* Update max-width to width */
+  }
+  
+  .search-container.focus {
+    width: 300px; /* Update max-width to width */
+  }
+  
+  .search-container input[type="text"] {
+    flex: 1;
+    border: none;
+    padding: 8px;
+    font-size: 16px;
+  }
+  
+  .search-container button {
+    border: none;
+    background-color: transparent;
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .search-container button i {
+    color: #333;
+    font-size: 18px;
+  }
+  
+  /* Optional styling for the icon */
+  .fa {
+    font-family: "Font Awesome";
+  }
+  body {
+    background-image: linear-gradient(to right , #cb2d3e , #ef473a);
+  }
+  
+  .searchBox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform:  translate(-50%,50%);
+    background: #2f3640;
+    height: 40px;
+    border-radius: 40px;
+    padding: 10px;
+  
+  }
+  
+  .searchBox:hover > .searchInput {
+    width: 240px;
+    padding: 0 6px;
+  }
+  
+  .searchBox:hover > .searchButton {
+  background: white;
+  color : #2f3640;
+  }
+  
+  .searchButton {
+    color: white;
+    float: right;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #2f3640;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s;
+  }
+  
+  .searchInput {
+    border:none;
+    background: none;
+    outline:none;
+    float:left;
+    padding: 0;
+    color: white;
+    font-size: 16px;
+    transition: 0.4s;
+    line-height: 40px;
+    width: 0px;
+  
+  }
+  
+  @media screen and (max-width: 620px) {
+  .searchBox:hover > .searchInput {
+    width: 150px;
+    padding: 0 6px;
+  }
+  }
+  
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    margin-top: 20px;
+  }
+  
+  
+  
+  
+  .card {
+    width: calc(20% - 20px); /* Set the width to occupy 20% of the container width minus margin */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-image {
+    width: 100%;
+    height: 60%; /* Updated height */
+    min-height: 280px; /* Added minimum height */
+    overflow: hidden;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  .card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .card-content h3 {
+    color: #2d2d2d;
+    font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+  
+  .card-content p {
+    color: gray;
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  
+  .card-content p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: stretch;
+    margin-top: 20px;
+  }
+  
+  .card-image {
+    position: relative;
+  }
+  
+  .adult-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: red;
+    color: white;
+    font-size: 14px;
+    padding: 4px;
+    border-radius: 50%;
+  }
+  
+  
+  .circle {
+    width: 35px;
+    height: 35px;
+    border: 3px solid green; /* Updated outline color and thickness */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+  }
+  
+  .number {
+    color: black;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .rounded-button {
+    flex: 1;
+    border: none;
+    border-radius: 20px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  
+  
+  
+  .rounded-button:last-child {
+    margin-right: 0;
+  }
+  
+  .rounded-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .rounded-button:focus {
+    outline: none;
+  }
+  
+  .menu-container {
+    width: 200px;
+    background-color: #ffffff;
+    margin-top: 50px;
+    padding: 20px;
+    box-sizing: border-box;
+    float: left;
+  }
+  
+  .menu {
+    color: #fff;
+  }
+  
+  .menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .menu-item {
+    margin-bottom: 10px;
+  }
+  
+  .menu-item a {
+    display: block;
+    border-radius: 20px;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    color: #2f3640;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    font-size: 16px;
+    line-height: 24px;
+    transition: background-color 0.3s ease;
+  }
+  
+  
+  
+  .menu-item a:hover {
+    background-color: #0056b3;
+    color: #ffffff;
+  }
+  
+  
+  .content-container {
+    margin-left: 220px; /* Adjust this value to create space between the menu and content */
+  }
+  
+  .menu-item a.selected {
+    background-color: #0056b3;
+    color:#ffffff
+    /* Add any other styling you want to apply to the selected button */
+  }

@@ -1,0 +1,95 @@
+<div class="menu-container">
+    <div class="menu">
+      <ul>
+        <li class="menu-item">
+          <a  [class.selected]="moviesSelected" (click)="selectMovies()">Filmek</a>
+        </li>
+        <li class="menu-item">
+          <a  [class.selected]="seriesSelected" (click)="selectSeries()">Sorozatok</a>
+        </li>
+        <li class="menu-item">
+          <a  [class.selected]="selectedType === 'nowPlaying'" (click)="selectType('nowPlaying')" (click)="getNowPlaying()">Most játszottak</a>
+        </li>
+        <li class="menu-item">
+          <a  [class.selected]="selectedType === 'popular'" (click)="selectType('popular')" (click)="getPopular()">Népszerűek</a>
+        </li>
+        <li class="menu-item">
+          <a  [class.selected]="selectedType === 'topRated'" (click)="selectType('topRated')" (click)="getTopRated()">Legjobbra értékelt</a>
+        </li>
+        <li class="menu-item">
+            <a  [class.selected]="selectedType === 'trending'" (click)="selectType('trending')" (click)="getTrending()">Felkapott</a>
+          </li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="search-container" [ngClass]="{'focus': isTextboxFocused}">
+    <input type="text" [(ngModel)]="searchQuery" placeholder="Keresés" (keyup.enter)="searchMovies()" (focus)="isTextboxFocused = true" (blur)="isTextboxFocused = false">
+    <i class="material-icons search-icon" *ngIf="!isTextboxFocused">search</i>
+  </div>
+  
+  <div class="card-container">
+    <ng-container *ngIf="moviesSelected">
+      <ng-container *ngFor="let movie of movies">
+        <div class="mdc-card card" *ngIf="movie.imagesLoaded" (click)="navigateToMovieDetails(movie.id)">
+          <div class="mdc-card__primary-action card-image">
+            <img class="mdc-card__media-item" [src]="getImageURL(movie.images[0].file_path)" (click)="navigateToMovieDetails(movie.id)" alt="Movie Image">
+          </div>
+          <div class="mdc-card__content card-content">
+            <h3 class="mdc-typography--headline6">{{ movie.title }}</h3>
+            <div class="movie-info">
+              <p><strong>Megjelenési dátum:</strong> {{ movie.release_date }}</p>
+              <p><strong>Értékelés:</strong> {{ movie.vote_average }}</p>
+              <p><strong>Eredeti nyelv:</strong> {{ movie.original_language }}</p>
+              <p><strong>Műfaj:</strong> {{ getGenresByIds(movie.genre_ids) }}</p>
+              <p><strong>Szereplők:</strong>
+                <ng-container *ngIf="movie.actors">
+                  <ng-container *ngFor="let actor of movie.actors.slice(0, 5); let i = index">
+                    {{ actor.name }}
+                    <ng-container *ngIf="i < 4">, </ng-container>
+                    <ng-container *ngIf="i === 4 && movie.actors.length > 5">...</ng-container>
+                  </ng-container>
+                </ng-container>
+              </p>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+  
+  
+  
+    <ng-container *ngIf="seriesSelected">
+      <ng-container *ngFor="let tv of series">
+        <div class="card" *ngIf="tv.imagesLoaded" (click)="navigateToSeriesDetails(tv.id)">
+          <div class="card-image">
+            <img [src]="getImageURL(tv.images[0].file_path)" alt="Movie Image">
+          </div>
+          <div class="card-content">
+            <h3>{{ tv.name }}</h3>
+            <div class="movie-info">
+              <p><strong>Első adás:</strong> {{ tv.first_air_date }}</p>
+              <p><strong>Értékelés:</strong> {{ tv.vote_average }}</p>
+              <p><strong>Eredeti nyelv:</strong> {{ tv.original_language }}</p>
+              <p><strong>Műfaj:</strong> {{ getGenresByIds(tv.genre_ids) }}</p>
+              <p><strong>Évadok:</strong>
+              <ng-container *ngIf="tv.seasons">
+                <ng-container *ngFor="let season of tv.seasons.slice(0, 5); let i = index">
+                  {{ season.name }}
+                  <ng-container *ngIf="i < (tv.seasons.length - 1)">, </ng-container>
+                  <ng-container *ngIf="i === 4 && tv.seasons.length > 5">...</ng-container>
+                </ng-container>
+              </ng-container>
+            </p>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+  
+  <div class="pagination">
+    <button class="pagination-button" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">Previous</button>
+    <button class="pagination-button" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">Next</button>
+  </div>
