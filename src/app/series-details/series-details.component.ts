@@ -13,7 +13,7 @@ import { Genre } from 'src/app/models/genre.type';
   templateUrl: './series-details.component.html',
   styleUrls: ['./series-details.component.css']
 })
-export class SeriesDetailsComponent {
+export class SeriesDetailsComponent implements OnInit{
 
   tvId: number = 0;
   series!: Series;
@@ -33,6 +33,7 @@ export class SeriesDetailsComponent {
   fetchSeriesDetails() {
     this.seriesService.getSeriesById(this.tvId).subscribe(
       (tv: Series) => {
+        console.log(tv.overview); // Display the
         this.series = tv;
         console.log(this.series); // Display the fetched movie details
   
@@ -79,5 +80,7 @@ export class SeriesDetailsComponent {
   goBack() {
     this.router.navigate(['/']); // Replace '/' with the appropriate route for going back
   }
+
+  
 
 }

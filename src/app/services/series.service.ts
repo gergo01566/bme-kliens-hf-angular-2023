@@ -6,6 +6,7 @@ import { SearchResult } from '../models/search-result.ype';
 import { Observable, map } from 'rxjs';
 import { Genre } from '../models/genre.type';
 import { Season } from '../models/season.type';
+import { Actor } from '../models/actor.type';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +42,7 @@ export class SeriesService {
   searchSeries(query: string, page: number, pageSize: number): Observable<SearchResult<Series[]>> {
     console.log(query);
     if (query === '') {
-      const url1 = `${this.apiUrl}/tv/popular?language=en&api_key=${this.apiKey}&page=${page}&include_adult=false`;
+      const url1 = `${this.apiUrl}/tv/popular?language=hu&api_key=${this.apiKey}&page=${page}&include_adult=false`;
       return this.http.get<SearchResult<Series[]>>(url1);
     }
     const url = `${this.apiUrl}/search/tv?api_key=${this.apiKey}&language=hu&query=${query}&page=${page}&include_adult=false`;
@@ -70,4 +71,11 @@ export class SeriesService {
     const url = `${this.apiUrl}/tv/${tvId}?language=hu&api_key=${this.apiKey}`;
     return this.http.get<Series>(url);
   }
+
+  // getActors(tvId: number): Observable<Actor[]> {
+  //   const url = `${this.apiUrl}/movie/${movieId}/credits?api_key=${this.apiKey}`;
+  //   return this.http.get<Actor[]>(url).pipe(
+  //     map((response: any) => response.cast)
+  //   );
+  // }
 }

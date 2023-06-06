@@ -7,7 +7,6 @@ import { SeriesService } from "../services/series.service";
 import { Series } from "../models/series.type";
 import { Season } from "../models/season.type";
 import { Router } from "@angular/router";
-
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -68,6 +67,7 @@ export class MovieListComponent implements OnInit {
   ngOnInit() {
     this.loadMovies();
     this.loadSeries();
+    this.getPopular();
     this.loadGenres();
     this.searchMovies();
   }

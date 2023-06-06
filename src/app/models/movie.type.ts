@@ -28,6 +28,7 @@ export interface Movie {
   images: any[]; // Add the images property
   imagesLoaded: boolean; // Add the imagesLoaded property
   actors: Actor[]; // Add the actors property
+  character: string; // Add the actors property
   }
 
   

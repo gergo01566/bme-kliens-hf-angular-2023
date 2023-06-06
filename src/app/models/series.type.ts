@@ -1,6 +1,7 @@
 import { Season } from "./season.type";
 
 export interface Series {
+number_of_seasons: string;
   name: string;
   adult: boolean;
   backdrop_path: string;

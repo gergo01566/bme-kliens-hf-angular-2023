@@ -1,0 +1,46 @@
+<div class="mdc-card movie-details-container" *ngIf="actor">
+    <div class="mdc-card__primary-action movie-details-header">
+      <div class="back-button-wrapper">
+        <button class="mdc-icon-button material-icons mdc-icon-button--primary back-button" (click)="goBack()">arrow_back</button>
+      </div>
+      <div class="movie-details-content">
+        <div class="mdc-card__media mdc-card__media--16-9 movie-images">
+          <img class="mdc-card__media-content movie-poster" [src]="actor.profile_path ? getImageURL(actor.profile_path) : ''" alt="Actor Poster">
+        </div>
+        <div class="movie-details-info">
+          <h1 class="mdc-typography--headline6 movie-title">{{ actor.name }}
+          </h1>
+  
+          <h2 class="mdc-typography--subtitle1 section-title">Életrajz:</h2>
+          <p class="mdc-typography--body2 summary">{{ actor.biography }}</p>
+          <h2 class="mdc-typography--subtitle1 section-title">Innen ismerheted:</h2>
+
+        <div class="card-container">
+            <ng-container *ngIf="actor.movies">
+              <ng-container *ngFor="let movie of actor.movies.slice(0,5); let i = index">
+                <div class="mdc-card card">
+                  <div class="mdc-card__primary-action card-image">
+                    <img class="mdc-card__media-item" [src]="getImageURL(movie.poster_path)" alt="Actor Profile Image">
+                  </div>
+                  <div class="mdc-card__content card-content">
+                    <h3 class="mdc-typography--headline6">{{ movie.title }}</h3>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+  
+          <h2 class="mdc-typography--subtitle1 section-title">További részletek</h2>
+          <ul class="mdc-list details-list">
+            <li class="mdc-list-item">
+                <span class="mdc-list-item__text"><strong>Születésnap:</strong> {{ actor.birthday }}</span>
+            </li>
+            <li class="mdc-list-item">
+                <span class="mdc-list-item__text"><strong>Születési hely:</strong> {{ actor.place_of_birth }}</span>
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+</div>

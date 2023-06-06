@@ -3,8 +3,6 @@ import { Component, NgModule, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Movie } from 'src/app/models/movie.type';
 import { MovieService } from 'src/app/services/movie.service';
-
-import { CommonModule } from '@angular/common';
 import { Actor } from 'src/app/models/actor.type';
 import { Genre } from 'src/app/models/genre.type';
 
@@ -68,7 +66,9 @@ export class MovieDetailsComponent implements OnInit {
     );
   }
   
-
+  navigateToActorDetails(actorId: number) {
+    this.router.navigate(["/actor-details", actorId]);
+  }
 
   getImageURL(filePath: string) {
     const baseImageUrl = 'https://image.tmdb.org/t/p/';

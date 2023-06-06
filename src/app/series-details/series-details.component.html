@@ -9,8 +9,8 @@
     </div>
   
     <div class="mdc-card__content movie-details">
-        <h2 class="mdc-typography--subtitle1 section-title">Bevezető</h2>
-        <p class="mdc-typography--body2 summary">{{ series.overview }}</p>
+        <h2 class="mdc-typography--subtitle1 section-title" *ngIf="series.overview">Bevezető</h2>
+        <p class="mdc-typography--body2 summary" *ngIf="series.overview">{{ series.overview }}</p>
   
         <h2 class="mdc-typography--subtitle1 section-title">További részletek</h2>
         <ul class="mdc-list details-list">
@@ -22,10 +22,10 @@
                 </div>
             </li>
             <li class="mdc-list-item">
-                <span class="mdc-list-item__text"><strong>Megjelenési dátum:</strong> {{ series.release_date }}</span>
+                <span class="mdc-list-item__text"><strong>Megjelenési dátum:</strong> {{ series.first_air_date }}</span>
             </li>
             <li class="mdc-list-item">
-                <span class="mdc-list-item__text"><strong>Film hossza:</strong> {{ series.runtime }} perc</span>
+                <span class="mdc-list-item__text"><strong>Évadok száma:</strong> {{ series.number_of_seasons }}</span>
             </li>
         
             <li class="mdc-list-item">
@@ -33,8 +33,8 @@
             </li>
             <li class="mdc-list-item">
                 <span class="mdc-list-item__text">
-                    <strong>Szereplők:</strong>
-                    <!-- <ng-container *ngIf="series.actors">
+                    <!--<strong>Szereplők:</strong>
+                     <ng-container *ngIf="series.actors">
                         <ng-container *ngFor="let actor of series.actors.slice(0, 30); let i = index">
                             {{ actor.name }}
                             <ng-container *ngIf="i < series.actors.length - 1">, </ng-container>

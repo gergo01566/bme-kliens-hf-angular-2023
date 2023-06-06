@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { SeriesDetailsComponent } from './series-details/series-details.component';
+import { ActorDetailsComponent } from './actor-details/actor-details.component';
 
 
 
@@ -23,7 +24,8 @@ import { SeriesDetailsComponent } from './series-details/series-details.componen
     AppComponent,
     MovieListComponent,
     MovieDetailsComponent,
-    SeriesDetailsComponent
+    SeriesDetailsComponent,
+    ActorDetailsComponent
   ],
   imports: [
     BrowserModule,
