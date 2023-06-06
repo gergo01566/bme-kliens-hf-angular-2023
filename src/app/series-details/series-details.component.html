@@ -7,6 +7,23 @@
     <div class="mdc-card__media mdc-card__media--16-9 movie-images">
         <img class="mdc-card__media-content movie-poster" [src]="series.images && series.images.length > 0 ? getImageURL(series.images[0].file_path) : ''" alt="Movie Poster">
     </div>
+
+    <h2 class="mdc-typography--subtitle1 section-title">Évadok:</h2>
+    <div class="card-container">
+      <ng-container *ngIf="series.seasons">
+        <ng-container *ngFor="let season of series.seasons.slice(0,6); let i = index">
+          <div class="mdc-card card" >
+            <div class="mdc-card__primary-action card-image">
+              <img class="mdc-card__media-item" [src]="getImageURL(season.poster_path)" alt="Actor Profile Image">
+            </div>
+            <div class="mdc-card__content card-content">
+              <h2 class="mdc-typography--headline6">{{ season.name }}</h2>
+              <h5 class="mdc-typography--headline6">{{ season.episode_count}} epizód</h5>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
   
     <div class="mdc-card__content movie-details">
         <h2 class="mdc-typography--subtitle1 section-title" *ngIf="series.overview">Bevezető</h2>
@@ -15,11 +32,7 @@
         <h2 class="mdc-typography--subtitle1 section-title">További részletek</h2>
         <ul class="mdc-list details-list">
             <li class="mdc-list-item">
-                <span class="mdc-typography--body2 rating-label"><strong>Értékelés:</strong></span>
-                <div class="rating-wrapper">
-                    <span class="rating-star">&#9733;</span>
-                    <span class="mdc-typography--body2 rating-value">{{ series.vote_average }}/10</span>
-                </div>
+                <span class="mdc-list-item__text"><strong>Értékelés: </strong> {{ series.vote_average }}/10</span>
             </li>
             <li class="mdc-list-item">
                 <span class="mdc-list-item__text"><strong>Megjelenési dátum:</strong> {{ series.first_air_date }}</span>
@@ -30,18 +43,6 @@
         
             <li class="mdc-list-item">
                 <span class="mdc-list-item__text"><strong>Eredeti nyelv:</strong> {{ series.original_language }}</span>
-            </li>
-            <li class="mdc-list-item">
-                <span class="mdc-list-item__text">
-                    <!--<strong>Szereplők:</strong>
-                     <ng-container *ngIf="series.actors">
-                        <ng-container *ngFor="let actor of series.actors.slice(0, 30); let i = index">
-                            {{ actor.name }}
-                            <ng-container *ngIf="i < series.actors.length - 1">, </ng-container>
-                            <ng-container *ngIf="i === 4 && series.actors.length > 30">...</ng-container>
-                        </ng-container>
-                    </ng-container> -->
-                </span>
             </li>
         </ul>
     </div>

@@ -18,6 +18,10 @@ import { SeriesDetailsComponent } from './series-details/series-details.componen
 import { ActorDetailsComponent } from './actor-details/actor-details.component';
 
 
+/**
+ * AppModule, amely felelős az alkalmazás fő moduljának konfigurálásáért.
+ * A kódban beimportáltam a különböző modulokat és komponenseket, majd ezeket felhasználva konfiguráltam az alkalmazás fő modulját
+ */
 
 @NgModule({
   declarations: [

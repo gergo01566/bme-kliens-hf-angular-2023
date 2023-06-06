@@ -5,7 +5,13 @@ import { MovieListComponent } from "./movie-list/movie-list.component";
 import { SeriesDetailsComponent } from "./series-details/series-details.component";
 import { ActorDetailsComponent } from "./actor-details/actor-details.component";
 
+/**
+ * Ez a modul felelős az alkalmazás útvonalainak kezeléséért és biztosítja, hogy az adott útvonalhoz tartozó komponensek megfelelően betöltődjenek a böngészőben.
+ * Az útvonalak a Routes osztály példányai, amelyeknek a path tulajdonságában adjuk meg az útvonalakat és a component tulajdonságában a hozzájuk tartozó komponenseket.
+ */
+
 const routes: Routes = [
+    { path: 'discover/:category/:type/:pageNumber', component: MovieListComponent },
     {
         path: '',
         redirectTo: '/discover',
@@ -28,6 +34,11 @@ const routes: Routes = [
         component: ActorDetailsComponent
     }
 ];
+
+/**
+ * Az AppRoutingModule modul az imports tömbben importálja a RouterModule-t és a routes tömböt használja az útvonalak konfigurálásához. 
+ * Az exports tömbben pedig exportálja a konfigurált útvonalakat a használatra.
+ */
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

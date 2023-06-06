@@ -1,7 +1,7 @@
 <div class="mdc-card movie-details-container" *ngIf="actor">
     <div class="mdc-card__primary-action movie-details-header">
       <div class="back-button-wrapper">
-        <button class="mdc-icon-button material-icons mdc-icon-button--primary back-button" (click)="goBack()">arrow_back</button>
+        <button class="mdc-icon-button material-icons mdc-icon-button--primary back-button" (click)="goBackToMovieDetails()">arrow_back</button>
       </div>
       <div class="movie-details-content">
         <div class="mdc-card__media mdc-card__media--16-9 movie-images">
@@ -20,7 +20,7 @@
               <ng-container *ngFor="let movie of actor.movies.slice(0,5); let i = index">
                 <div class="mdc-card card">
                   <div class="mdc-card__primary-action card-image">
-                    <img class="mdc-card__media-item" [src]="getImageURL(movie.poster_path)" alt="Actor Profile Image">
+                    <img class="mdc-card__media-item" *ngIf="actor.movies" [src]="getImageURL(movie.poster_path)" alt="Actor Profile Image">
                   </div>
                   <div class="mdc-card__content card-content">
                     <h3 class="mdc-typography--headline6">{{ movie.title }}</h3>

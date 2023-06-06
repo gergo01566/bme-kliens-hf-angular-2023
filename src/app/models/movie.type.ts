@@ -1,5 +1,9 @@
 import { Actor } from "./actor.type";
-
+/**
+ * Movie interfész, amely leírja egy film tulajdonságait és adattagjait.
+ * 
+ * Az Movie interfész segítségével definiálhatjuk a filmeket reprezentáló objektumok struktúráját és adattagjait, amelyeket a kódban használhatunk példányosításkor és adathozzáférés során.
+ */
 export interface Movie {
   adult: boolean;
   backdrop_path: string;

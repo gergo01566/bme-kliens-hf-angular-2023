@@ -1,11 +1,8 @@
-// movie-details.component.ts
+// series-details.component.ts
 import { Component, NgModule, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Series } from '../models/series.type';
 import { SeriesService } from '../services/series.service';
-
-import { CommonModule } from '@angular/common';
-import { Season } from '../models/season.type';
 import { Genre } from 'src/app/models/genre.type';
 
 @Component({
@@ -24,7 +21,6 @@ export class SeriesDetailsComponent implements OnInit{
     this.route.params.subscribe(params => {
       this.tvId = +params['id'];
       console.log(this.tvId); // Display the movie ID
-      // Perform any other logic with the movie ID
     });
     this.fetchSeriesDetails();
     console.log(this.series);
@@ -33,9 +29,7 @@ export class SeriesDetailsComponent implements OnInit{
   fetchSeriesDetails() {
     this.seriesService.getSeriesById(this.tvId).subscribe(
       (tv: Series) => {
-        console.log(tv.overview); // Display the
         this.series = tv;
-        console.log(this.series); // Display the fetched movie details
   
         this.seriesService.getSeriesImages(this.tvId).subscribe((imageData: any) => {
           const placeholderImagePath = 'https://www.unfe.org/wp-content/uploads/2019/04/SM-placeholder.png';
@@ -54,6 +48,13 @@ export class SeriesDetailsComponent implements OnInit{
             this.series.imagesLoaded = true;
           }
         });
+        if (this.series.overview === '') {
+          this.seriesService.getSeriesByIdInEngligh(this.tvId).subscribe(
+            (seriesDetails: Series) => {
+              this.series.overview = seriesDetails.overview;
+            }
+          );
+        }
         this.fetchGenreForSeries();
       }
     )
@@ -78,8 +79,18 @@ export class SeriesDetailsComponent implements OnInit{
   }
 
   goBack() {
-    this.router.navigate(['/']); // Replace '/' with the appropriate route for going back
+    const type = this.route.snapshot.queryParamMap.get('type') ?? '';
+    const pageNumber = this.route.snapshot.queryParamMap.get('page') ?? '';
+    const category = this.route.snapshot.queryParamMap.get('category') ?? '';
+    console.log(type, pageNumber, category);
+  
+    if (type && pageNumber) {
+      this.router.navigate(['/discover', category, type, pageNumber]);
+    } else {
+      this.router.navigate(['/discover']);
+    }
   }
+  
 
   
 

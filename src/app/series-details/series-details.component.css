@@ -1,189 +1,142 @@
 .movie-details-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    position: relative;
-    display: flex; /* Add this line to enable flexbox layout */
-    flex-direction: column; /* Arrange the child elements in a column */
-  }
-  
-  .movie-details {
-    flex: 1; /* Occupy remaining vertical space */
-    margin-bottom: 60px;
-  }
-  
-  .movie-title {
-    font-size: 36px;
-    margin-bottom: 10px;
-    color: #000000;
-  }
-  
-  .movie-scores {
-    margin-bottom: 20px;
-  }
-  
-  .score-label {
-    font-size: 18px;
-    margin-bottom: 5px;
-    color: #000000;
-  }
-  
-  .score-wrapper {
-    display: flex;
-    align-items: center;
-  }
-  
-  .imdb-score {
-    font-size: 25px;
-    margin-right: 5px;
-    color: #000000;
-  }
-  
-  .rating-star {
-    color: #ffcc00; 
-    font-size: 35px;
-    vertical-align: middle;
-  }
-  
-  .movie-images {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  
-  .movie-poster {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    border-radius: 10px;
-  }
-  
-  .movie-details {
-    margin-bottom: 20px;
-  }
-  
-  .section-title {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-  
-  .summary {
-    margin-bottom: 20px;
-  }
-  
-  .details-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .details-list li {
-    margin-bottom: 5px;
-  }
-  
-  .details-list li strong {
-    font-weight: bold;
-    margin-right: 5px;
-  }
-    
-  
-    .slideshow {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-    
-    .slideshow-container {
-      display: flex;
-      transition: transform 0.5s ease;
-    }
-    
-    .slideshow-slide {
-      flex: 0 0 100%;
-    }
-    
-    .slideshow-image {
-      width: 100%;
-      height: auto;
-    }
-    
-    .movie-poster {
-      width: 100%;
-      height: auto;
-      object-fit: cover; /* Add this line to ensure the image fills the container */
-    }
-    
-  
-    .menu-container {
-      width: 200px;
-      background-color: #ffffff;
-      margin-top: 50px;
-      padding: 20px;
-      box-sizing: border-box;
-      float: left;
-    }
-    
-    .menu {
-      color: #fff;
-    }
-    
-    .menu ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
-    
-    .menu-item {
-      margin-bottom: 10px;
-    }
-    
-    .menu-item a {
-      display: block;
-      border-radius: 20px;
-      padding: 10px 20px;
-      background-color: #ffffff;
-      color: #2f3640;
-      box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
-      margin: 10px;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
-      font-size: 16px;
-      line-height: 24px;
-      transition: background-color 0.3s ease;
-    }
-    
-    
-    
-    .menu-item a:hover {
-      background-color: #0056b3;
-      color: #ffffff;
-    }
-    
-    
-    .content-container {
-      margin-left: 50px; /* Adjust this value to create space between the menu and content */
-    }
-    
-    .menu-item a.selected {
-      background-color: #0056b3;
-      color:#ffffff
-      /* Add any other styling you want to apply to the selected button */
-    }
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+  display: flex; /* Add this line to enable flexbox layout */
+  flex-direction: column; /* Arrange the child elements in a column */
+}
 
-    .movie-details-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-      }
-      
-      .back-button {
-        align-self: flex-start;
-      }
+.movie-details {
+  flex: 1; /* Occupy remaining vertical space */
+  margin-bottom: 60px;
+}
+
+.movie-title {
+  font-size: 36px;
+  margin-bottom: 10px;
+  color: #000000;
+}
+
+.movie-images {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.movie-poster {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.section-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.summary {
+  margin-bottom: 20px;
+}
+
+.details-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.details-list li {
+  margin-bottom: 5px;
+}
+
+.details-list li strong {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  margin-top: 20px;
+}
+
+.card {
+  width: calc(35% - 35px); /* Set the width to occupy 20% of the container width minus margin */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  height: 400px; /* Updated height */
+}
+
+.card-image {
+  width: 100%;
+  height: 70%; /* Updated height */
+  min-height: 80px; /* Added minimum height */
+  overflow: hidden;
+  border-radius: 10px 10px 0 0;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.card-content h3 {
+  color: #2d2d2d;
+  font-size: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.card-content p {
+  color: gray;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.card-content p:last-child {
+  margin-bottom: 0;
+}
+
+.movie-details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .back-button {
+    align-self: flex-start;
+  }
     
+
+  

@@ -1,103 +1,144 @@
 // movie-details.component.ts
-import { Component, NgModule, OnInit, ViewChild } from '@angular/core';
+import { Component,  OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Movie } from 'src/app/models/movie.type';
 import { MovieService } from 'src/app/services/movie.service';
 import { Actor } from 'src/app/models/actor.type';
 import { Genre } from 'src/app/models/genre.type';
 
-
+/**
+ * MovieDetailsComponent-et a @Component dekorátorral jelöljük, és megadjuk a szükséges beállításokat (sablon, stíluslapok stb.).
+ */
 @Component({
   selector: 'app-movie-details',
   templateUrl: './movie-details.component.html',
   styleUrls: ['./movie-details.component.css']
 })
 
+/**
+ * MovieDetailsComponent class
+ */
 export class MovieDetailsComponent implements OnInit {
-  movieId: number = 0;
-  movie!: Movie;
+    movieId: number = 0;
+    movie!: Movie;
 
-  constructor(private movieService: MovieService  ,private route: ActivatedRoute, private router: Router) {}
+  /**
+   * Konstruktor, amelyben injektáljuk a szükséges szolgáltatásokat és osztályokat.
+   * @param movieService - A MovieService példány a filmekkel kapcsolatos műveletek elvégzéséhez.
+   * @param route - Az ActivatedRoute példány a route paraméterek eléréséhez.
+   * @param router - A Router példány a navigációhoz.
+   */
+  constructor(private movieService: MovieService, private route: ActivatedRoute, private router: Router) {}
 
+  /**
+   * Az inicializáció során lefutó metódus.
+   * Feliratkozik a route paraméterekre, lekéri a film részleteit és beállítja a komponens property-jeit.
+   */
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.movieId = +params['id'];
-      console.log(this.movie); // Display the movie ID
-      // Perform any other logic with the movie ID
-    });
-    this.fetchMovieDetails();
-    console.log(this.movie);
+      this.route.params.subscribe(params => {
+        this.movieId = +params['id'];
+      });
+      this.fetchMovieDetails();
   }
 
-  onItemChange(event: any) {
-    console.log('Carousel onItemChange', event);
-  }
-
+  /**
+   * A film részleteinek lekérdezése a MovieService segítségével.
+   * Beállítja a komponens property-jeit a kapott adatok alapján.
+   * Lekéri a film képeit és beállítja azokat a megfelelő property-kbe.
+   * Lekéri a filmhez tartozó színészeket és műfajt.
+   * Hiba esetén a hibát kiírja a konzolra
+   */
   fetchMovieDetails() {
-    this.movieService.getMovieById(this.movieId).subscribe(
-      (movie: Movie) => {
-        this.movie = movie;
-        console.log(this.movie); // Display the fetched movie details
-  
-        this.movieService.getMovieImages(this.movieId).subscribe((imageData: any) => {
-          const placeholderImagePath = 'https://www.unfe.org/wp-content/uploads/2019/04/SM-placeholder.png';
-          if (imageData && imageData.backdrops && imageData.backdrops.length > 0) {
-            this.movie.images = imageData.backdrops.filter((image: any) => image.file_path !== null);
-            
-            // Check if movie.images array is empty
-            if (this.movie.images.length === 0) {
-              // Add a placeholder image to the movie.images array
-              this.movie.images.push({
-                file_path: placeholderImagePath,
-                // You can add more properties if needed, such as width and height
-              });
+      this.movieService.getMovieById(this.movieId).subscribe(
+        (movie: Movie) => {
+          this.movie = movie;
+          console.log(this.movie);
+    
+          this.movieService.getMovieImages(this.movieId).subscribe((imageData: any) => {
+            const placeholderImagePath = 'https://www.unfe.org/wp-content/uploads/2019/04/SM-placeholder.png';
+            if (imageData && imageData.backdrops && imageData.backdrops.length > 0) {
+              this.movie.images = imageData.backdrops.filter((image: any) => image.file_path !== null);
+              
+              if (this.movie.images.length === 0) {
+                this.movie.images.push({
+                  file_path: placeholderImagePath,
+                });
+              }
+              this.movie.imagesLoaded = true;
             }
-            
-            this.movie.imagesLoaded = true;
-          }
-        });
-  
-        this.fetchActorsForMovies();
-        this.fetchGenreForMovie();
-      },
-      (error) => {
-        console.error(error); // Handle the error
-      }
-    );
-  }
-  
+          });
+    
+          this.fetchActorsForMovies();
+          this.fetchGenreForMovie();
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+    }
+
+  /**
+   * A színész részleteinhez navigálás
+   * Átirányít a '/actor-details' útvonalra a színész azonosítóval
+   * A film azonosítóját is query paraméterként megadja, a későbbi visszanivágáláshoz
+   * @param actorId - A színész azonosítója.
+   */
   navigateToActorDetails(actorId: number) {
-    this.router.navigate(["/actor-details", actorId]);
+    this.router.navigate(['/actor-details', actorId], { queryParams: { movieId: this.movieId } });
   }
-
+    
+  /**
+   * Egy kép URL-t generál a TMDB (The Movie Database) szolgáltatásból. 
+   * Az alap kép URL-t (baseImageUrl) és a képméretet (imageSize) összeadva és a fájl elérési útvonalát (filePath) hozzáfűzve kapjuk meg a teljes kép URL-t.
+   * @param fájl elérési útvonala a weben 
+   * @returns  
+   */
   getImageURL(filePath: string) {
-    const baseImageUrl = 'https://image.tmdb.org/t/p/';
-    const imageSize = 'w500'; // You can adjust the size as per your requirements
-    return baseImageUrl + imageSize + filePath;
-  }
+      const baseImageUrl = 'https://image.tmdb.org/t/p/';
+      const imageSize = 'w500';
+      return baseImageUrl + imageSize + filePath;
+    }
 
+  /**
+   * Visszalépés a korábbi oldalra.
+   * Ellenőrzi, hogy van-e 'type' és 'page' query paraméter.
+   * a van, akkor a '/discover' útvonalra navigál a megfelelő kategóriával, típussal és oldalszámmal.
+   * Ha nincs, akkor a '/discover' útvonalra navigál alapértelmezett beállításokkal.
+   */
   goBack() {
-    this.router.navigate(['/']); // Replace '/' with the appropriate route for going back
+    const type = this.route.snapshot.queryParamMap.get('type');
+    const pageNumber = this.route.snapshot.queryParamMap.get('page');
+    const category = this.route.snapshot.queryParamMap.get('category');
+
+    if (type && pageNumber) {
+      this.router.navigate(['/discover', category, type, pageNumber]);
+    } else {
+      this.router.navigate(['/discover']);
+    }
   }
 
+  /**
+   * A filmhez tartozó színészek lekérdezése a MovieService segítségével.
+   * Beállítja a komponens property-jébe a kapott adatokat.
+   */
   fetchActorsForMovies() {
       this.movieService.getActors(this.movieId).subscribe((actorData: Actor[]) => {
         this.movie.actors = actorData;
       });
-    }
-
-    fetchGenreForMovie() {
-      this.movieService.getGenres().subscribe((genreData: Genre[]) => {
-        if (genreData.length > 0) {
-          const genre: Genre = {
-            id: genreData[0].id, // Assign the ID of the first genre
-            name: genreData[0].name // Assign the name of the first genre
-          };
-          this.movie.genre = genre.name;
-        }
-      });
-    }
-    
-    
-
+  }
+  /**
+   * A filmhez tartozó műfaj lekérdezése a MovieService segítségével.
+   * Beállítja a komponens property-jébe a kapott adatok alapján.
+   */
+  fetchGenreForMovie() {
+    this.movieService.getGenres().subscribe((genreData: Genre[]) => {
+      if (genreData.length > 0) {
+        const genre: Genre = {
+          id: genreData[0].id, 
+          name: genreData[0].name 
+        };
+        this.movie.genre = genre.name;
+      }
+    });
+  }
 }

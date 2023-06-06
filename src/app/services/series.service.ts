@@ -6,11 +6,19 @@ import { SearchResult } from '../models/search-result.ype';
 import { Observable, map } from 'rxjs';
 import { Genre } from '../models/genre.type';
 import { Season } from '../models/season.type';
-import { Actor } from '../models/actor.type';
 
 @Injectable({
   providedIn: 'root'
 })
+
+/**
+* SeriesService osztály a sorozatok adatainak lekéréséhez
+ * A metódusok a saját API-kulcsukat (apiKey) és az API végpontot (apiUrl) használják az adatok lekérése céljából. 
+ * A HttpClient segítségével HTTP GET kéréseket küldenek a szerverhez, majd az Observable típus segítségével visszatérnek a válaszadattal. 
+ * 
+ * Ez a szolgáltatásosztály egy API-val kommunikál, és különböző metódusokat kínál a sorozatokkal kapcsolatos adatok lekérésére. 
+ * Az @Injectable() dekorátor megjelöli az osztályt, hogy az injektálható legyen az Angular alkalmazásban.
+ */
 export class SeriesService {
 
   private apiKey = environment.apiKey;
@@ -18,27 +26,51 @@ export class SeriesService {
 
   constructor(private http: HttpClient) { }
 
+  // Metódusok
+
+  /**
+   * Népszerű sorozatok lekérése Api hívással
+   * @returns Observable<SearchResult<Series[]>>
+   */
   getPopularSeries(): Observable<SearchResult<Series[]>> {
     const url = `${this.apiUrl}/tv/popular?language=hu&api_key=${this.apiKey}`;
     return this.http.get<SearchResult<Series[]>>(url);
   }
 
+  /**
+   * Legjobban értékelt sorozatok lekérése.
+   * @returns Observable<SearchResult<Series[]>>
+   */
   getTopRatedSeries(): Observable<SearchResult<Series[]>> {
     const url = `${this.apiUrl}/tv/top_rated?language=hu&api_key=${this.apiKey}`;
     return this.http.get<SearchResult<Series[]>>(url);
   }
 
+  /**
+   * Jelenleg játszott sorozatok lekérése.
+   * @returns Observable<SearchResult<Series[]>>
+   */
   getNowPlayingSeries(): Observable<SearchResult<Series[]>> {
     const url = `${this.apiUrl}/tv/airing_today?language=hu&api_key=${this.apiKey}`;
     return this.http.get<SearchResult<Series[]>>(url);
   }
 
+  /**
+   * Felkapott sorozatok lekérése.
+   * @returns Observable<SearchResult<Series[]>>
+   */
   getTrendingSeries(): Observable<SearchResult<Series[]>> {
     const url = `${this.apiUrl}/trending/tv/week?language=hu&api_key=${this.apiKey}`;
     return this.http.get<SearchResult<Series[]>>(url);
   }
 
-
+  /**
+   * Sorozatok keresése a megadott keresőszó alapján, ha nincs keresési feltétel megadva akkor a legnépszerűbb sorozatokkal tér vissza.
+   * @param query A keresőszó
+   * @param page Az oldalszám
+   * @param pageSize Az oldalméret
+   * @returns Observable<SearchResult<Series[]>>
+   */
   searchSeries(query: string, page: number, pageSize: number): Observable<SearchResult<Series[]>> {
     console.log(query);
     if (query === '') {
@@ -49,17 +81,30 @@ export class SeriesService {
     return this.http.get<SearchResult<Series[]>>(url);
   }
 
-
+  /**
+   * Sorozatok képeinek lekérése a megadott sorozat azonosító alapján.
+   * @param tvId A sorozat azonosítója
+   * @returns any
+   */
   getSeriesImages(tvId: number) {
-      const url = `${this.apiUrl}/tv/${tvId}/images?api_key=${this.apiKey}`;
-      return this.http.get(url);
+    const url = `${this.apiUrl}/tv/${tvId}/images?api_key=${this.apiKey}`;
+    return this.http.get(url);
   }
 
+  /**
+   * Sorozatok műfajainak lekérése.
+   * @returns Observable<Genre[]>
+   */
   getGenres(): Observable<Genre[]> {
     const url = `https://api.themoviedb.org/3/genre/tv/list?language=hu&api_key=${this.apiKey}`;
     return this.http.get<Genre[]>(url);
   }
 
+  /**
+   * Sorozatok évadjainak lekérése a megadott sorozat azonosító alapján.
+   * @param tvId A sorozat azonosítója
+   * @returns Observable<Season[]>
+   */
   getSeasons(tvId: number): Observable<Season[]> {
     const url = `${this.apiUrl}/tv/${tvId}?language=hu&api_key=${this.apiKey}`;
     return this.http.get<Season[]>(url).pipe(
@@ -67,15 +112,23 @@ export class SeriesService {
     );
   }
 
+  /**
+   * Sorozat lekérése az azonosító alapján.
+   * @param tvId A sorozat azonosítója
+   * @returns Observable<Series>
+   */
   getSeriesById(tvId: number): Observable<Series> {
     const url = `${this.apiUrl}/tv/${tvId}?language=hu&api_key=${this.apiKey}`;
     return this.http.get<Series>(url);
   }
 
-  // getActors(tvId: number): Observable<Actor[]> {
-  //   const url = `${this.apiUrl}/movie/${movieId}/credits?api_key=${this.apiKey}`;
-  //   return this.http.get<Actor[]>(url).pipe(
-  //     map((response: any) => response.cast)
-  //   );
-  // }
+  /**
+   * Sorozat lekérése az azonosító alapján. Angol részleteket ad vissza
+   * @param tvId A sorozat azonosítója
+   * @returns Observable<Series>
+   */
+  getSeriesByIdInEngligh(tvId: number): Observable<Series> {
+    const url = `${this.apiUrl}/tv/${tvId}?language=en-US&api_key=${this.apiKey}`;
+    return this.http.get<Series>(url);
+  }
 }

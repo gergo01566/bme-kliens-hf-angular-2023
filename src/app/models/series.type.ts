@@ -1,5 +1,7 @@
 import { Season } from "./season.type";
-
+/**
+ * Series interfészt, amely egy tévésorozatot reprezentál.
+ */
 export interface Series {
 number_of_seasons: string;
   name: string;
@@ -28,7 +30,7 @@ number_of_seasons: string;
   imageUrl: string;
   trailerUrl: string;
   first_air_date: string;
-  images: any[]; // Add the images property
-  imagesLoaded: boolean; // Add the imagesLoaded property
-  seasons: Season[]; // Add the seasons property
+  images: any[]; 
+  imagesLoaded: boolean; 
+  seasons: Season[];
   }
