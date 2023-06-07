@@ -53,6 +53,7 @@ export class MovieListComponent implements OnInit {
    * Ezt követően meghívja az adatok betöltéséhez szükséges metódusokat (loadMovies, loadSeries, getPopular, loadGenres, search).
    */
   ngOnInit() {
+    this.loadGenres();
     this.route.params.subscribe(params => {
       if(params['category'] == 'movie'){
         this.moviesSelected = true;
@@ -63,15 +64,19 @@ export class MovieListComponent implements OnInit {
       }      
       this.selectedType = params['type'];
       this.currentPage = +params['pageNumber'] || 1;
-      console.log(this.currentPage);
-      console.log(this.moviesSelected);
-      console.log(this.selectedType)
     });
-    this.loadMovies();
-    this.loadSeries();
-    this.getPopular();
-    this.loadGenres();
-    this.search();
+    if(this.selectedType == 'topRated'){
+      this.getTopRated();
+    } else if(this.selectedType == 'popular'){
+      this.getPopular();
+    } else if(this.selectedType == 'nowPlaying'){
+      this.getNowPlaying();
+    } else if(this.selectedType == 'trending'){
+      this.getTrending();
+    } else {
+      this.loadMovies();
+      this.loadSeries();
+    }
   }
 
   /**
@@ -233,12 +238,13 @@ export class MovieListComponent implements OnInit {
    */
   getPopular(){
     if(this.moviesSelected){
-      this.movieService.getPopularMovies().subscribe((data: SearchResult<Movie[]>) => {
+      this.movieService.getPopularMovies(this.currentPage).subscribe((data: SearchResult<Movie[]>) => {
         this.movies = data.results.flatMap((page) => page); 
         this.totalResults = data.total_results;
         this.totalPages = data.total_pages;
         this.fetchImagesForMovies();
         this.fetchActorsForMovies();
+        this.router.navigate(["/discover", 'movie', 'popular',1], { queryParams: { category: 'movie', type: this.selectedType, page: this.currentPage} });
       });
     } else {
       this.seriesService.getPopularSeries().subscribe((data: SearchResult<Series[]>) => {
@@ -247,6 +253,7 @@ export class MovieListComponent implements OnInit {
         this.totalPages = data.total_pages;
         this.fetchImagesForSeries();
         this.fetchSeasonsForSeries();
+        this.router.navigate(["/discover", 'series', 'popular',1], { queryParams: { category: 'series', type: this.selectedType, page: this.currentPage} });
       });
     }
   }
@@ -257,13 +264,14 @@ export class MovieListComponent implements OnInit {
   getTopRated(){
     if(this.moviesSelected){
       // Ha a filmek vannak kiválasztva, lekéri a legjobban értékelt filmeket
-      this.movieService.getTopRatedMovies().subscribe((data: SearchResult<Movie[]>) => {
+      this.movieService.getTopRatedMovies(this.currentPage).subscribe((data: SearchResult<Movie[]>) => {
         // Az adatok érkezésekor frissíti a this.movies tömböt a kapott eredményekkel
         this.movies = data.results.flatMap((page) => page); 
         this.totalResults = data.total_results;
         this.totalPages = data.total_pages;
         this.fetchImagesForMovies(); // Képek lekérése a filmekhez
         this.fetchActorsForMovies(); // Színészek lekérése a filmekhez
+        this.router.navigate(["/discover", 'movie', 'topRated',1], { queryParams: { category: 'movie', type: this.selectedType, page: this.currentPage} });
       });
     } else {
       // Ha a sorozatok vannak kiválasztva, lekéri a legjobban értékelt sorozatokat
@@ -274,6 +282,8 @@ export class MovieListComponent implements OnInit {
         this.totalPages = data.total_pages;
         this.fetchImagesForSeries(); // Képek lekérése a sorozatokhoz
         this.fetchSeasonsForSeries(); // Évszakok lekérése a sorozatokhoz
+        this.router.navigate(["/discover", 'series', 'topRated',1], { queryParams: { category: 'series', type: this.selectedType, page: this.currentPage} });
+
       });
     }
   }
@@ -284,13 +294,15 @@ export class MovieListComponent implements OnInit {
   getNowPlaying(){
     if(this.moviesSelected){
       // Ha a filmek vannak kiválasztva, lekéri a jelenleg játszott filmeket
-      this.movieService.getNowPlayingMovies().subscribe((data: SearchResult<Movie[]>) => {
+      this.movieService.getNowPlayingMovies(this.currentPage).subscribe((data: SearchResult<Movie[]>) => {
         // Az adatok érkezésekor frissíti a this.movies tömböt a kapott eredményekkel
         this.movies = data.results.flatMap((page) => page); 
         this.totalResults = data.total_results;
         this.totalPages = data.total_pages;
         this.fetchImagesForMovies(); // Képek lekérése a filmekhez
         this.fetchActorsForMovies(); // Színészek lekérése a filmekhez
+        this.router.navigate(["/discover", 'movie', 'nowPlaying',1], { queryParams: { category: 'movie', type: this.selectedType, page: this.currentPage} });
+
       });
     } else {
       // Ha a sorozatok vannak kiválasztva, lekéri a jelenleg játszott sorozatokat
@@ -301,6 +313,7 @@ export class MovieListComponent implements OnInit {
         this.totalPages = data.total_pages;
         this.fetchImagesForSeries(); // Képek lekérése a sorozatokhoz
         this.fetchSeasonsForSeries(); // Évszakok lekérése a sorozatokhoz
+        this.router.navigate(["/discover", 'series', 'nowPlaying',1], { queryParams: { category: 'series', type: this.selectedType, page: this.currentPage} });
       });
     }
   }
@@ -311,13 +324,14 @@ export class MovieListComponent implements OnInit {
   getTrending(){
     if(this.moviesSelected){
       // Ha a filmek vannak kiválasztva, lekéri a trendi filmeket
-      this.movieService.getTrendingMovies().subscribe((data: SearchResult<Movie[]>) => {
+      this.movieService.getTrendingMovies(this.currentPage).subscribe((data: SearchResult<Movie[]>) => {
         // Az adatok érkezésekor frissíti a this.movies tömböt a kapott eredményekkel
         this.movies = data.results.flatMap((page) => page); 
         this.totalResults = data.total_results;
         this.totalPages = data.total_pages;
         this.fetchImagesForMovies(); // Képek lekérése a filmekhez
         this.fetchActorsForMovies(); // Színészek lekérése a filmekhez
+        this.router.navigate(["/discover", 'movie', 'trending',1], { queryParams: { category: 'movie', type: this.selectedType, page: this.currentPage} });
       });
     } else {
       // Ha a sorozatok vannak kiválasztva, lekéri a trendi sorozatokat
@@ -328,6 +342,7 @@ export class MovieListComponent implements OnInit {
         this.totalPages = data.total_pages;
         this.fetchImagesForSeries(); // Képek lekérése a sorozatokhoz
         this.fetchSeasonsForSeries(); // Évszakok lekérése a sorozatokhoz
+        this.router.navigate(["/discover", 'series', 'trending',1], { queryParams: { category: 'series', type: this.selectedType, page: this.currentPage} });
       });
     }
   }

@@ -40,8 +40,7 @@ ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.actorId = +params['id'];
     });
-    this.loadActorDetails();
-}
+    this.loadActorDetails();}
 
 /**
  * Lekérdezzük a színész részleteit az ActorService-en keresztül. 
@@ -65,19 +64,25 @@ loadActorDetails() {
   );
 }
 
+
+  
 /**
  * Visszatér a film részletei oldalra
  */
 goBackToMovieDetails() {
-    this.route.queryParamMap.subscribe((params: ParamMap) => {
-      const movieId = params.get('movieId');
-      if (movieId) {
-        this.router.navigate(['/movie-details', movieId]);
-      } else {
-        this.router.navigate(['/discover']);
-      }
+  const movieId = this.route.snapshot.queryParamMap.get('movieId');
+  const category = this.route.snapshot.queryParamMap.get('category');
+  const type = this.route.snapshot.queryParamMap.get('type');
+  const pageNumber = this.route.snapshot.queryParamMap.get('pageNumber');
+
+  if (movieId && category  && pageNumber) {
+    this.router.navigate(['/movie-details', movieId], {
+      queryParams: { category, type, page: pageNumber },
     });
+  } else {
+    this.router.navigate(['/discover']);
   }
+}
 
 /**
  * Lekérdezzük a színészhez kapcsolódó filmeket az ActorService segítségével. 
@@ -87,10 +92,12 @@ fetchMoviesToActor() {
   this.actorService.getMoviesByActor(this.actorId).subscribe((response: any) => {
     if (response.cast) {
       this.actor.movies = response.cast.map((movie: any) => {
+        const placeholderImagePath = 'https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png';
+
         return {
           title: movie.title,
           character: movie.character,
-          poster_path: movie.poster_path
+          poster_path: movie.poster_path ? movie.poster_path : placeholderImagePath
         };
       });
     }
@@ -104,10 +111,13 @@ fetchMoviesToActor() {
  * @returns  
  */
 getImageURL(filePath: string) {
+  if(filePath == 'https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png'){
+    return filePath;
+  }
     const baseImageUrl = 'https://image.tmdb.org/t/p/';
     const imageSize = 'w500';
     return baseImageUrl + imageSize + filePath;
-  }
+}
 
 }
 

@@ -30,8 +30,8 @@ export class MovieService {
    * Népszerű filmek lekérése API hívással magyar nyelven
    * @returns A népszerű filmek SearchResultként
    */
-  getPopularMovies(): Observable<SearchResult<Movie[]>> {
-    const url = `${this.apiUrl}/movie/popular?language=hu&api_key=${this.apiKey}`;
+  getPopularMovies(page: number): Observable<SearchResult<Movie[]>> {
+      const url = `${this.apiUrl}/movie/popular?language=hu&page=${page}&api_key=${this.apiKey}`;
     return this.http.get<SearchResult<Movie[]>>(url);
   }
 
@@ -39,8 +39,8 @@ export class MovieService {
    * Legjobban értékelt filmek lekérése magyar nyelven
    * @returns A legjobban értékelt filmek SearchResultként
    */
-  getTopRatedMovies(): Observable<SearchResult<Movie[]>> {
-    const url = `${this.apiUrl}/movie/top_rated?language=hu&api_key=${this.apiKey}`;
+  getTopRatedMovies(page: number): Observable<SearchResult<Movie[]>> {
+    const url = `${this.apiUrl}/movie/top_rated?language=hu&page=${page}&api_key=${this.apiKey}`;
     return this.http.get<SearchResult<Movie[]>>(url);
   }
 
@@ -48,8 +48,8 @@ export class MovieService {
    * Jelenleg játszó filmek lekérése magyar nyelven
    * @returns A jelenleg játszó filmek SearchResultként
    */
-  getNowPlayingMovies(): Observable<SearchResult<Movie[]>> {
-    const url = `${this.apiUrl}/movie/now_playing?language=hu&api_key=${this.apiKey}`;
+  getNowPlayingMovies(page: number): Observable<SearchResult<Movie[]>> {
+    const url = `${this.apiUrl}/movie/now_playing?language=hu&page=${page}&api_key=${this.apiKey}`;
     return this.http.get<SearchResult<Movie[]>>(url);
   }
 
@@ -57,8 +57,8 @@ export class MovieService {
    * Felkapott filmek lekérése
    * @returns A felkapott filmek SearchResultként
    */
-  getTrendingMovies(): Observable<SearchResult<Movie[]>> {
-    const url = `${this.apiUrl}/trending/movie/week?language=hu&api_key=${this.apiKey}`;
+  getTrendingMovies(page:number): Observable<SearchResult<Movie[]>> {
+    const url = `${this.apiUrl}/trending/movie/week?language=hu&page=${page}&api_key=${this.apiKey}`;
     return this.http.get<SearchResult<Movie[]>>(url);
   }
 
